@@ -22,18 +22,34 @@ int main() {
     // store each frame here
     cv::Mat frame;
 
-    std::string ascii_chars = "@%#*+=-:. ";
-    // std::string ascii_chars = "MWNXK0Okxdolc:,. ";
-    //std::string ascii_chars = " .,:clodxkO0KXNWM";
+    std::string classic = "@%#*+=-:. ";
+    std::string minimal = "MWNXK0Okxdolc:,. ";
+    std::string soft = " .,:clodxkO0KXNWM";
+
+    std::string ascii_chars = classic;
 
     cv::Ptr<cv::freetype::FreeType2> ft = cv::freetype::createFreeType2();
     ft->loadFontData("C:\\Windows\\Fonts\\consola.ttf", 0);
+
+    // create a contrast slider
+    cv::namedWindow("ASCII Studio", cv::WINDOW_AUTOSIZE);
+
+    int contrast = 120;
+
+    cv::createTrackbar(
+        "Contrast",         // slider's label
+        "ASCII Studio",     // window name
+        &contrast,          // address of the variable the slider updates
+        300                 // maximum slider value
+    );
 
     // read frames until the video ends
     while (video.read(frame)) {
         cv::Mat gray_frame;
         cv::cvtColor(frame, gray_frame, cv::COLOR_BGR2GRAY);
-        gray_frame.convertTo(gray_frame, -1, 1.2, 0);
+
+        double contrast_factor = contrast / 100.0;
+        gray_frame.convertTo(gray_frame, -1, contrast_factor, 0);
 
         cv::Mat small_frame; 
 
@@ -78,7 +94,7 @@ int main() {
 
                 ft->putText(
                     ascii_canvas,
-                    std::string(1, ascii_char),
+                    std::string(1, ascii_char),     // char to string
                     cv::Point(draw_x, draw_y),
                     11,
                     cv::Scalar(text_brightness, text_brightness, text_brightness),
@@ -101,8 +117,20 @@ int main() {
 
         // wait 33 milliseconds (~30 FPS)
         // press ESC to exit
-        if (cv::waitKey(33) == 27) {
+        int key = cv::waitKey(33); 
+
+        if (key == 27) {
             break;
+        }
+
+        if (key == '1') {
+            ascii_chars = classic;
+        }
+        if (key == '2') {
+            ascii_chars = minimal;
+        }
+        if (key == '3') {
+            ascii_chars = soft;
         }
     }
 

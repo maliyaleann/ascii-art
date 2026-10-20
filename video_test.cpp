@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <opencv2/opencv.hpp>
+#include <opencv2/freetype.hpp>
 #include <algorithm>
 
 int main() {
@@ -22,11 +23,17 @@ int main() {
     cv::Mat frame;
 
     std::string ascii_chars = "@%#*+=-:. ";
+    // std::string ascii_chars = "MWNXK0Okxdolc:,. ";
+    //std::string ascii_chars = " .,:clodxkO0KXNWM";
+
+    cv::Ptr<cv::freetype::FreeType2> ft = cv::freetype::createFreeType2();
+    ft->loadFontData("C:\\Windows\\Fonts\\consola.ttf", 0);
 
     // read frames until the video ends
     while (video.read(frame)) {
         cv::Mat gray_frame;
         cv::cvtColor(frame, gray_frame, cv::COLOR_BGR2GRAY);
+        gray_frame.convertTo(gray_frame, -1, 1.2, 0);
 
         cv::Mat small_frame; 
 
@@ -69,14 +76,15 @@ int main() {
                 int draw_x = offset_x + x * char_width;
                 int draw_y = offset_y + (y + 1) * char_height;
 
-                cv::putText(
-                    ascii_canvas,                       // target canvas for drawing
-                    std::string(1, ascii_char),         // convert char to string to draw on canvas
-                    cv::Point(draw_x, draw_y),          // position to draw the character
-                    cv::FONT_HERSHEY_PLAIN,             // font type
-                    0.6,                                // font scale
-                    cv::Scalar(text_brightness, text_brightness, text_brightness),      // text color
-                    1.0                                 // line thickness
+                ft->putText(
+                    ascii_canvas,
+                    std::string(1, ascii_char),
+                    cv::Point(draw_x, draw_y),
+                    11,
+                    cv::Scalar(text_brightness, text_brightness, text_brightness),
+                    -1,
+                    cv::LINE_AA,
+                    true
                 );
             }
         }

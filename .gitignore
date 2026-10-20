@@ -1,0 +1,18 @@
+# Compiled files
+*.exe
+*.o
+*.obj
+
+# Build output
+build/
+debug/
+release/
+
+# Test videos and images
+*.mp4
+*.avi
+*.mov
+*.jpg
+
+# Editor-specific settings
+.vscode/

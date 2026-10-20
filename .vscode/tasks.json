@@ -1,0 +1,47 @@
+
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "Build Regular C++",
+            "command": "C:\\msys64\\ucrt64\\bin\\g++.exe",
+            "args": [
+                "-g",
+                "${file}",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "type": "cppbuild",
+            "label": "Build ASCII Studio",
+            "command": "C:\\msys64\\ucrt64\\bin\\g++.exe",
+            "args": [
+                "-g",
+                "video_test.cpp",
+                "-o",
+                "video_test.exe",
+                "-IC:\\msys64\\ucrt64\\include\\opencv5",
+                "-LC:\\msys64\\ucrt64\\lib",
+                "-lopencv_videoio",
+                "-lopencv_highgui",
+                "-lopencv_imgproc",
+                "-lopencv_core",
+                "-lopencv_freetype"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$gcc"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
